@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -54,6 +55,15 @@ public class FloatingWindow extends Service {
         TextView tv = (TextView)floatView.findViewById(R.id.textView_Date);
         tv.setText(currentDate);
 
+        // Callback for Close button
+        ImageButton closeButton = (ImageButton)floatView.findViewById(R.id.imageButton_Close);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close();
+            }
+        });
+
         // Layout parameters
         int LAYOUT_TYPE;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -69,8 +79,8 @@ public class FloatingWindow extends Service {
                 PixelFormat.TRANSLUCENT
         );
         floatWindowLayoutParam.gravity = Gravity.TOP | Gravity.LEFT;
-        floatWindowLayoutParam.x = 0;
-        floatWindowLayoutParam.y = 0;
+        floatWindowLayoutParam.x = 4;
+        floatWindowLayoutParam.y = 4;
 
         // Add the view to the Windows Manager
         windowManager.addView(floatView, floatWindowLayoutParam);
@@ -106,6 +116,12 @@ public class FloatingWindow extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        close();
+    }
+
+    // Close floating window
+    public void close() {
+        // Stop service
         stopSelf();
         // Window is removed from the screen
         windowManager.removeView(floatView);

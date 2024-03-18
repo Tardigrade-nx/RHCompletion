@@ -14,23 +14,23 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView_Date"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton_Close"
         app:layout_constraintStart_toEndOf="@+id/imageView_LogoRH"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/textView_Date"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView_Date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="18/03/2024"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView_Nickname"
         app:layout_constraintStart_toStartOf="@+id/textView_Nickname"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Nickname" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_Nickname"
+        tools:text="@string/default_date" />
 
     <ImageView
         android:id="@+id/imageView_LogoRH"
@@ -45,5 +45,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/rh_logo_black" />
+
+    <ImageButton
+        android:id="@+id/imageButton_Close"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/yellow"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
