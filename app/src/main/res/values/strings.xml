@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RH Completion</string>
+    <string name="content_descr_logo_rh">RH Logo</string>
+    <string name="default_nickname">Your Nickname</string>
+</resources>
