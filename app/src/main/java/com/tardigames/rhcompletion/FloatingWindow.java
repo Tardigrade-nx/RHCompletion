@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 
 import java.text.DateFormat;
@@ -50,18 +49,30 @@ public class FloatingWindow extends Service {
         LayoutInflater inflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         floatView = (ViewGroup) inflater.inflate(R.layout.floating_layout, null);
 
+        // Set Nickname
+        TextView tvNickname = (TextView)floatView.findViewById(R.id.textView_Nickname);
+        tvNickname.setText(Options.getNickname());
+
         // Set current date in local format
         String currentDate = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-        TextView tv = (TextView)floatView.findViewById(R.id.textView_Date);
-        tv.setText(currentDate);
+        TextView tvDate = (TextView)floatView.findViewById(R.id.textView_Date);
+        tvDate.setText(currentDate);
 
         // Callback for Close button
         ImageButton closeButton = (ImageButton)floatView.findViewById(R.id.imageButton_Close);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                close();
-            }
+        closeButton.setOnClickListener(v -> close());
+
+        // Callback for Edit button
+        ImageButton editButton = (ImageButton)floatView.findViewById(R.id.imageButton_edit);
+        editButton.setOnClickListener(v -> {
+            // Disable autostart
+            Options.setAutostart(false);
+            // Start main activity
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            // Quit service
+            close();
         });
 
         // Layout parameters
@@ -78,7 +89,7 @@ public class FloatingWindow extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
         );
-        floatWindowLayoutParam.gravity = Gravity.TOP | Gravity.LEFT;
+        floatWindowLayoutParam.gravity = Gravity.TOP | Gravity.START;
         floatWindowLayoutParam.x = 4;
         floatWindowLayoutParam.y = 4;
 

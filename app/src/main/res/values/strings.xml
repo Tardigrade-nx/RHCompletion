@@ -3,4 +3,8 @@
     <string name="content_descr_logo_rh">RH Logo</string>
     <string name="default_nickname">Your Nickname</string>
     <string name="default_date">Date</string>
+    <string name="title">RH Completion Note</string>
+    <string name="button_OK">OK</string>
+    <string name="editText_Nickname">Nickname</string>
+    <string name="rh_logo_description">RH Logo</string>
 </resources>

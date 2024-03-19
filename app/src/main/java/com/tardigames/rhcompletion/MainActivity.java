@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,12 +28,43 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Init options
+        Options.init(this);
+
+        // Handle click on button OK
+        Button buttonOk = findViewById(R.id.button_OK);
+        buttonOk.setOnClickListener(v -> {
+            // Save nickname
+            EditText editText = (EditText) findViewById(R.id.editText_Nickname);
+            Options.setNickname(String.valueOf(editText.getText()));
+            // Set autostart
+            Options.setAutostart(true);
+            // Start
+            checkStart();
+        });
+
+        // Set nickname
+        EditText editText = (EditText) findViewById(R.id.editText_Nickname);
+        editText.setText(Options.getNickname());
+
         // Stop the service if it's already running
         if (FloatingWindow.isRunning) {
             stopService(new Intent(MainActivity.this, FloatingWindow.class));
         }
 
-        // Request 'display on top' permission if necessary
+        // Request permission if necessary
+        if (! Settings.canDrawOverlays(this)) {
+            requestAppearOnTopPermission();
+        }
+
+        // Autostart
+        if (Options.getAutostart()) {
+            checkStart();
+        }
+    }
+
+    // Start the floating window service if possible
+    private void checkStart() {
         if (Settings.canDrawOverlays(this)) {
             // Start service and stop main activity
             startService(new Intent(MainActivity.this, FloatingWindow.class));

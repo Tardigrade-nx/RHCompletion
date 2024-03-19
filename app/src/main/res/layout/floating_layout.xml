@@ -15,7 +15,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView_Date"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton_Close"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_LogoRH"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,8 +27,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textView_Nickname"
-        app:layout_constraintStart_toStartOf="@+id/textView_Nickname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView_LogoRH"
         app:layout_constraintTop_toBottomOf="@+id/textView_Nickname"
         tools:text="@string/default_date" />
 
@@ -36,14 +36,14 @@
         android:id="@+id/imageView_LogoRH"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="24dp"
         android:contentDescription="@string/content_descr_logo_rh"
         android:src="@drawable/rh_logo_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toStartOf="@+id/textView_Nickname"
-        app:layout_constraintHeight_percent="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.2"
         app:srcCompat="@drawable/rh_logo_black" />
 
     <ImageButton
@@ -57,5 +57,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <ImageButton
+        android:id="@+id/imageButton_edit"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/yellow"
+        android:src="@android:drawable/ic_menu_edit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
