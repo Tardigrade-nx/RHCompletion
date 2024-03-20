@@ -37,11 +37,6 @@ public class FloatingWindow extends Service {
         super.onCreate();
         isRunning = true;
 
-        // Screen height and width
-        DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
-        int width = metrics.widthPixels;
-        int height = metrics.heightPixels;
-
         // Window Manager
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -82,16 +77,26 @@ public class FloatingWindow extends Service {
         } else {
             LAYOUT_TYPE = WindowManager.LayoutParams.TYPE_TOAST;
         }
+        // Compute floating window width
+        DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
+        int floatingWindowWidth;
+        if (metrics.widthPixels > metrics.heightPixels) {
+            // Horizontal screen
+            floatingWindowWidth = (int)(metrics.widthPixels * 0.5f);
+        } else {
+            // Vertical screen
+            floatingWindowWidth = (int)(metrics.widthPixels * 0.8f);
+        }
         WindowManager.LayoutParams floatWindowLayoutParam = new WindowManager.LayoutParams(
-                (int) (width * 0.8f),
-                (int) (width * 0.8f * 0.5f),
+                floatingWindowWidth,
+                (int)(floatingWindowWidth * 0.3f),
                 LAYOUT_TYPE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
         );
         floatWindowLayoutParam.gravity = Gravity.TOP | Gravity.START;
-        floatWindowLayoutParam.x = 4;
-        floatWindowLayoutParam.y = 4;
+        floatWindowLayoutParam.x = 0;
+        floatWindowLayoutParam.y = 0;
 
         // Add the view to the Windows Manager
         windowManager.addView(floatView, floatWindowLayoutParam);

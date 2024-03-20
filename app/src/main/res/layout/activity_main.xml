@@ -14,7 +14,8 @@
         android:layout_width="84dp"
         android:layout_height="84dp"
         android:contentDescription="@string/rh_logo_description"
-        app:srcCompat="@drawable/rh_logo_black" />
+        android:src="@drawable/rh_logo_theme"
+        app:srcCompat="@drawable/rh_logo_theme" />
 
     <TextView
         android:id="@+id/textView_Title"

@@ -65,9 +65,9 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:background="@color/yellow"
-        android:src="@android:drawable/ic_menu_edit"
+        android:src="@android:drawable/ic_menu_manage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:srcCompat="@android:drawable/ic_menu_manage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
