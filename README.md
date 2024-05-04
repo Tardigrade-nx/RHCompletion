@@ -7,7 +7,7 @@ When using the app, please take a real photo, not a screenshot, and mention the 
 
 Here's an example of a completion photo using the app:
 
-![Completion photo example](https://raw.githubusercontent.com/Tardigrade-nx/RHCompletion/main/completion_photo_example.png)
+![Completion photo example](completion_photo_example.png)
 
 ## Installation
 
