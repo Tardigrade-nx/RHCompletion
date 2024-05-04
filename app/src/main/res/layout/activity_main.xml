@@ -24,15 +24,49 @@
         android:text="@string/title"
         android:textSize="20sp" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
     <EditText
         android:id="@+id/editText_Nickname"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
         android:ems="14"
         android:inputType="text"
         android:text="@string/editText_Nickname" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/textView_width"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:text="@string/textView_width"
+        android:textSize="16sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <SeekBar
+        android:id="@+id/seekBar_width"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:max="100"
+        android:progress="1" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
 
     <Button
         android:id="@+id/button_OK"

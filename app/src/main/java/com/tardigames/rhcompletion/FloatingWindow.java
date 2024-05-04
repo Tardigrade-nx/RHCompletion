@@ -79,14 +79,7 @@ public class FloatingWindow extends Service {
         }
         // Compute floating window width
         DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
-        int floatingWindowWidth;
-        if (metrics.widthPixels > metrics.heightPixels) {
-            // Horizontal screen
-            floatingWindowWidth = (int)(metrics.widthPixels * 0.5f);
-        } else {
-            // Vertical screen
-            floatingWindowWidth = (int)(metrics.widthPixels * 0.8f);
-        }
+        final int floatingWindowWidth = (int) (metrics.widthPixels * Options.getWidth() / 100.0f);
         WindowManager.LayoutParams floatWindowLayoutParam = new WindowManager.LayoutParams(
                 floatingWindowWidth,
                 (int)(floatingWindowWidth * 0.3f),

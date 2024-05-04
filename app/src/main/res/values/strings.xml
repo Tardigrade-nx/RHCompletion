@@ -7,4 +7,5 @@
     <string name="button_OK">OK</string>
     <string name="editText_Nickname">Nickname</string>
     <string name="rh_logo_description">RH Logo</string>
+    <string name="textView_width">Width: %d%%</string>
 </resources>

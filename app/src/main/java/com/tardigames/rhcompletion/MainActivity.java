@@ -8,6 +8,8 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+
+    // Widgets
+    EditText m_editText_nickname;
+    TextView m_textView_width;
+    SeekBar m_seekBar_width;
+    Button m_button_ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,24 +36,49 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Init options
+        // Init
         Options.init(this);
+        m_editText_nickname = findViewById(R.id.editText_Nickname);
+        m_textView_width = findViewById(R.id.textView_width);
+        m_seekBar_width = findViewById(R.id.seekBar_width);
+        m_button_ok = findViewById(R.id.button_OK);
 
-        // Handle click on button OK
-        Button buttonOk = findViewById(R.id.button_OK);
-        buttonOk.setOnClickListener(v -> {
-            // Save nickname
-            EditText editText = (EditText) findViewById(R.id.editText_Nickname);
-            Options.setNickname(String.valueOf(editText.getText()));
-            // Set autostart
+        // Configure nickname widget
+        m_editText_nickname.setText(Options.getNickname());
+
+        // Configure width widget
+        m_seekBar_width.setProgress(Options.getWidth());
+        m_textView_width.setText(String.format(getString(R.string.textView_width), m_seekBar_width.getProgress()));
+        m_seekBar_width.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // Called when the progress is changed
+                // Update Width text
+                if (m_seekBar_width.getProgress() < 30)
+                    m_seekBar_width.setProgress(30);
+                m_textView_width.setText(String.format(getString(R.string.textView_width), m_seekBar_width.getProgress()));
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Called when the user starts moving the thumb
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Called when the user stops moving the thumb
+            }
+        });
+
+        // Configure OK button
+        m_button_ok.setOnClickListener(v -> {
+            // Save nickname in options
+            Options.setNickname(String.valueOf(m_editText_nickname.getText()));
+            // Save width in options
+            Options.setWidth(m_seekBar_width.getProgress());
+            // Set autostart in options
             Options.setAutostart(true);
             // Start
             checkStart();
         });
-
-        // Set nickname
-        EditText editText = (EditText) findViewById(R.id.editText_Nickname);
-        editText.setText(Options.getNickname());
 
         // Stop the service if it's already running
         if (FloatingWindow.isRunning) {
@@ -57,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             requestAppearOnTopPermission();
         }
 
-        // Autostart
+        // Autostart if configured
         if (Options.getAutostart()) {
             checkStart();
         }

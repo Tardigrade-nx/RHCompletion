@@ -10,6 +10,7 @@ public class Options {
     private static SharedPreferences sharedPref;
     private static final String opt_nickname = "nickname";
     private static final String opt_autostart = "autostart";
+    private static final String opt_width = "width";
 
     // Init
     public static void init(Context p_context) {
@@ -37,6 +38,17 @@ public class Options {
     public static void setAutostart(Boolean p_autostart) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(opt_autostart, p_autostart);
+        editor.apply();
+    }
+
+    // Read saved width
+    public static int getWidth() {
+        return sharedPref.getInt(opt_width, 50);
+    }
+
+    public static void setWidth(int p_width) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(opt_width, p_width);
         editor.apply();
     }
 

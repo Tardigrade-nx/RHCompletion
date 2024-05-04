@@ -36,7 +36,7 @@
         android:id="@+id/imageView_LogoRH"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="32dp"
         android:contentDescription="@string/content_descr_logo_rh"
         android:src="@drawable/rh_logo_black"
         app:layout_constraintBottom_toBottomOf="parent"
