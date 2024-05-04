@@ -13,7 +13,7 @@ Here's an example of a completion photo using the app:
 
 **RH Completion** can be installed on an Android device manually, from an APK file:
 
-- Download the APK file from the [latest release](https://github.com/Tardigrade-nx/RHCompletion/releases)
+- Download the APK file from the [latest release](https://github.com/Tardigrade-nx/RHCompletion/releases/latest)
 - Copy the APK file on your device
 - On your device, from a file manager, click on the APK file to install
 
@@ -27,7 +27,7 @@ Then, you will have to configure:
 
 Subsequent launches will open the floating note directly.
 
-When the floating is opened:
+When the floating note is opened:
 - You can move it anywhere on the screen
 - Close it with the 'X' button (upper-right)
 - Go back to the settings screen with the 'settings' button (upper-left)
