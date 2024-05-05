@@ -7,7 +7,7 @@ When using the app, please take a real photo, not a screenshot, and mention the 
 
 Here's an example of a completion photo using the app:
 
-![Completion photo example](completion_photo_example.png)
+![Completion photo example](assets/completion_photo_example.png)
 
 ## Installation
 
@@ -31,3 +31,8 @@ When the floating note is opened:
 - You can move it anywhere on the screen
 - Close it with the 'X' button (upper-right)
 - Go back to the settings screen with the 'settings' button (upper-left)
+
+### Quick Settings button
+
+Starting with version 1.1, you can add a 'RH Completion' button in the Quick Settings menu, to open/close the floating note more easily.
+This can be done manually in the Quick Settings menu configuration of your device.
