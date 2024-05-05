@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -20,10 +19,10 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     // Widgets
-    EditText m_editText_nickname;
-    TextView m_textView_width;
-    SeekBar m_seekBar_width;
-    Button m_button_ok;
+    private EditText m_editText_nickname;
+    private TextView m_textView_width;
+    private SeekBar m_seekBar_width;
+    private Button m_button_ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,5 +119,4 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 }
