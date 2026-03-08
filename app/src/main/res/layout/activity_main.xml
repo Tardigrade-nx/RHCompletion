@@ -64,6 +64,7 @@
             android:progress="1" />
 
         <TextView
+            android:id="@+id/textView_screen_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"

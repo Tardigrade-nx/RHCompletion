@@ -2,9 +2,11 @@ package com.tardigames.rhcompletion;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,19 +67,31 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // Configure screen spinner
-        // Order must match Options.SCREEN_PRIMARY=0, SCREEN_SECONDARY=1
-        ArrayAdapter<CharSequence> screenAdapter = ArrayAdapter.createFromResource(
-                this, R.array.screen_options, android.R.layout.simple_spinner_item);
-        screenAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        m_spinner_screen.setAdapter(screenAdapter);
-        m_spinner_screen.setSelection(Options.getPreferredScreen());
+        // Configure screen spinner — only show on multi-display devices
+        DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+        if (displayManager.getDisplays().length > 1) {
+            // Order must match Options.SCREEN_PRIMARY=0, Options.SCREEN_SECONDARY=1
+            ArrayAdapter<CharSequence> screenAdapter = ArrayAdapter.createFromResource(
+                    this, R.array.screen_options, android.R.layout.simple_spinner_item);
+            screenAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            m_spinner_screen.setAdapter(screenAdapter);
+            m_spinner_screen.setSelection(Options.getPreferredScreen());
+        } else {
+            // Single-display device: hide the screen selector entirely
+            findViewById(R.id.textView_screen_label).setVisibility(View.GONE);
+            m_spinner_screen.setVisibility(View.GONE);
+            // Force primary so the fallback in FloatingWindow is always correct
+            Options.setPreferredScreen(Options.SCREEN_PRIMARY);
+        }
 
         // Configure OK button
         m_button_ok.setOnClickListener(v -> {
             Options.setNickname(String.valueOf(m_editText_nickname.getText()));
             Options.setWidth(m_seekBar_width.getProgress());
-            Options.setPreferredScreen(m_spinner_screen.getSelectedItemPosition());
+            // Only save screen preference if the spinner is visible
+            if (m_spinner_screen.getVisibility() == View.VISIBLE) {
+                Options.setPreferredScreen(m_spinner_screen.getSelectedItemPosition());
+            }
             Options.setAutostart(true);
             checkStart();
         });
