@@ -1,11 +1,14 @@
 package com.tardigames.rhcompletion;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,6 +25,8 @@ import java.util.Calendar;
 
 public class FloatingWindow extends Service {
 
+    public static final String EXTRA_DISPLAY_ID = "display_id";
+
     private WindowManager windowManager;
     private ViewGroup floatView;
     static public boolean isRunning = false;
@@ -36,29 +41,52 @@ public class FloatingWindow extends Service {
     public void onCreate() {
         super.onCreate();
         isRunning = true;
+    }
 
-        // Window Manager
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // Read which display launched the app; fall back to the default display
+        int displayId = Display.DEFAULT_DISPLAY;
+        if (intent != null) {
+            displayId = intent.getIntExtra(EXTRA_DISPLAY_ID, Display.DEFAULT_DISPLAY);
+        }
+        setupWindow(displayId);
+        return START_NOT_STICKY;
+    }
 
-        // Inflate Layout
-        LayoutInflater inflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+    private void setupWindow(int displayId) {
+        // Resolve the target display
+        DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+        Display display = displayManager.getDisplay(displayId);
+        if (display == null) {
+            // Fallback to default display if the requested one isn't available
+            display = displayManager.getDisplay(Display.DEFAULT_DISPLAY);
+        }
+
+        // Create a context tied to the correct display so WindowManager
+        // and LayoutInflater both target that screen
+        Context displayContext = createDisplayContext(display);
+        windowManager = (WindowManager) displayContext.getSystemService(WINDOW_SERVICE);
+
+        // Inflate Layout using the display context
+        LayoutInflater inflater = LayoutInflater.from(displayContext);
         floatView = (ViewGroup) inflater.inflate(R.layout.floating_layout, null);
 
         // Set Nickname
-        TextView tvNickname = (TextView)floatView.findViewById(R.id.textView_Nickname);
+        TextView tvNickname = (TextView) floatView.findViewById(R.id.textView_Nickname);
         tvNickname.setText(Options.getNickname());
 
         // Set current date in local format
         String currentDate = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-        TextView tvDate = (TextView)floatView.findViewById(R.id.textView_Date);
+        TextView tvDate = (TextView) floatView.findViewById(R.id.textView_Date);
         tvDate.setText(currentDate);
 
         // Callback for Close button
-        ImageButton closeButton = (ImageButton)floatView.findViewById(R.id.imageButton_Close);
+        ImageButton closeButton = (ImageButton) floatView.findViewById(R.id.imageButton_Close);
         closeButton.setOnClickListener(v -> close());
 
         // Callback for Edit button
-        ImageButton editButton = (ImageButton)floatView.findViewById(R.id.imageButton_edit);
+        ImageButton editButton = (ImageButton) floatView.findViewById(R.id.imageButton_edit);
         editButton.setOnClickListener(v -> {
             // Disable autostart
             Options.setAutostart(false);
@@ -77,12 +105,14 @@ public class FloatingWindow extends Service {
         } else {
             LAYOUT_TYPE = WindowManager.LayoutParams.TYPE_TOAST;
         }
-        // Compute floating window width
-        DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
+
+        // Compute floating window width using the target display's metrics
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
         final int floatingWindowWidth = (int) (metrics.widthPixels * Options.getWidth() / 100.0f);
         WindowManager.LayoutParams floatWindowLayoutParam = new WindowManager.LayoutParams(
                 floatingWindowWidth,
-                (int)(floatingWindowWidth * 0.3f),
+                (int) (floatingWindowWidth * 0.3f),
                 LAYOUT_TYPE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
@@ -91,10 +121,10 @@ public class FloatingWindow extends Service {
         floatWindowLayoutParam.x = 0;
         floatWindowLayoutParam.y = 0;
 
-        // Add the view to the Windows Manager
+        // Add the view to the Window Manager
         windowManager.addView(floatView, floatWindowLayoutParam);
 
-        // Move the floating windows
+        // Move the floating window on drag
         floatView.setOnTouchListener(new View.OnTouchListener() {
             final WindowManager.LayoutParams floatWindowLayoutUpdateParam = floatWindowLayoutParam;
             double x, y, px, py;
@@ -133,7 +163,9 @@ public class FloatingWindow extends Service {
         // Stop service
         stopSelf();
         // Window is removed from the screen
-        windowManager.removeView(floatView);
+        if (floatView != null && floatView.isAttachedToWindow()) {
+            windowManager.removeView(floatView);
+        }
         isRunning = false;
     }
 }

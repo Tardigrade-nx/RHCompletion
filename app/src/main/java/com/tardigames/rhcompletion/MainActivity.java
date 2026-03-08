@@ -3,8 +3,10 @@ package com.tardigames.rhcompletion;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Display;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Request permission if necessary
-        if (! Settings.canDrawOverlays(this)) {
+        if (!Settings.canDrawOverlays(this)) {
             requestAppearOnTopPermission();
         }
 
@@ -95,11 +97,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Returns the display ID this Activity is currently shown on
+    private int getCurrentDisplayId() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // API 30+: getDisplay() is the preferred, non-deprecated path
+            Display display = getDisplay();
+            return display != null ? display.getDisplayId() : Display.DEFAULT_DISPLAY;
+        } else {
+            //noinspection deprecation
+            return getWindowManager().getDefaultDisplay().getDisplayId();
+        }
+    }
+
     // Start the floating window service if possible
     private void checkStart() {
         if (Settings.canDrawOverlays(this)) {
-            // Start service and stop main activity
-            startService(new Intent(MainActivity.this, FloatingWindow.class));
+            // Pass the current display ID so the overlay appears on the same screen
+            Intent intent = new Intent(MainActivity.this, FloatingWindow.class);
+            intent.putExtra(FloatingWindow.EXTRA_DISPLAY_ID, getCurrentDisplayId());
+            startService(intent);
             finish();
         } else {
             requestAppearOnTopPermission();
