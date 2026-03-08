@@ -47,22 +47,22 @@ public class FloatingWindow extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // Read which display launched the app; fall back to the default display
-        if (intent != null) {
-            mDisplayId = intent.getIntExtra(EXTRA_DISPLAY_ID, Display.DEFAULT_DISPLAY);
-        }
-        setupWindow(mDisplayId);
+        setupWindow();
         return START_NOT_STICKY;
     }
 
-    private void setupWindow(int displayId) {
-        // Resolve the target display
+    private void setupWindow() {
+        // Resolve the target display from the saved preference
         DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
-        Display display = displayManager.getDisplay(displayId);
-        if (display == null) {
-            // Fallback to default display if the requested one isn't available
+        Display display;
+        if (Options.getPreferredScreen() == Options.SCREEN_SECONDARY) {
+            Display[] displays = displayManager.getDisplays();
+            display = (displays.length > 1) ? displays[1] : displayManager.getDisplay(Display.DEFAULT_DISPLAY);
+        } else {
+            // SCREEN_PRIMARY
             display = displayManager.getDisplay(Display.DEFAULT_DISPLAY);
         }
+        mDisplayId = display.getDisplayId();
 
         // Create a context tied to the correct display so WindowManager
         // and LayoutInflater both target that screen
@@ -86,17 +86,14 @@ public class FloatingWindow extends Service {
         ImageButton closeButton = (ImageButton) floatView.findViewById(R.id.imageButton_Close);
         closeButton.setOnClickListener(v -> close());
 
-        // Callback for Edit button
+        // Callback for Edit button — open settings on the same display as the overlay
         ImageButton editButton = (ImageButton) floatView.findViewById(R.id.imageButton_edit);
         editButton.setOnClickListener(v -> {
-            // Disable autostart
             Options.setAutostart(false);
-            // Start main activity on the same display as the overlay
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ActivityOptions options = ActivityOptions.makeBasic().setLaunchDisplayId(mDisplayId);
             startActivity(intent, options.toBundle());
-            // Quit service
             close();
         });
 
@@ -134,14 +131,12 @@ public class FloatingWindow extends Service {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
-                    // Memorize x,y of touch
                     case MotionEvent.ACTION_DOWN:
                         x = floatWindowLayoutUpdateParam.x;
                         y = floatWindowLayoutUpdateParam.y;
                         px = event.getRawX();
                         py = event.getRawY();
                         break;
-                    // Update x,y
                     case MotionEvent.ACTION_MOVE:
                         floatWindowLayoutUpdateParam.x = (int) ((x + event.getRawX()) - px);
                         floatWindowLayoutUpdateParam.y = (int) ((y + event.getRawY()) - py);
@@ -153,18 +148,14 @@ public class FloatingWindow extends Service {
         });
     }
 
-    // Called when stopService() is called in MainActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
         close();
     }
 
-    // Close floating window
     public void close() {
-        // Stop service
         stopSelf();
-        // Window is removed from the screen
         if (floatView != null && floatView.isAttachedToWindow()) {
             windowManager.removeView(floatView);
         }

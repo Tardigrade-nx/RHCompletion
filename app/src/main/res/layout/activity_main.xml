@@ -1,78 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal|center_vertical"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/imageView_Logo"
-        android:layout_width="84dp"
-        android:layout_height="84dp"
-        android:contentDescription="@string/rh_logo_description"
-        android:src="@drawable/rh_logo_theme"
-        app:srcCompat="@drawable/rh_logo_theme" />
-
-    <TextView
-        android:id="@+id/textView_Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:textSize="20sp" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
-
-    <EditText
-        android:id="@+id/editText_Nickname"
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:ems="14"
-        android:inputType="text"
-        android:text="@string/editText_Nickname" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
+        tools:context=".MainActivity">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        <ImageView
+            android:id="@+id/imageView_Logo"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:contentDescription="@string/rh_logo_description"
+            android:src="@drawable/rh_logo_theme"
+            app:srcCompat="@drawable/rh_logo_theme" />
 
-    <TextView
-        android:id="@+id/textView_width"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:text="@string/textView_width"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/textView_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/title"
+            android:textSize="20sp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        <EditText
+            android:id="@+id/editText_Nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="32dp"
+            android:ems="14"
+            android:inputType="text"
+            android:text="@string/editText_Nickname" />
 
-    <SeekBar
-        android:id="@+id/seekBar_width"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:max="100"
-        android:progress="1" />
+        <TextView
+            android:id="@+id/textView_width"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/textView_width"
+            android:textSize="16sp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        <SeekBar
+            android:id="@+id/seekBar_width"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="10dp"
+            android:max="100"
+            android:progress="1" />
 
-    <Button
-        android:id="@+id/button_OK"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:width="200dp"
-        android:text="@string/button_OK" />
+        <TextView
+            android:id="@+id/textView_screen_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="32dp"
+            android:text="Default Screen"
+            android:textSize="16sp" />
 
-</LinearLayout>
+        <Spinner
+            android:id="@+id/spinner_screen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="4dp" />
+
+        <Button
+            android:id="@+id/button_OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:width="200dp"
+            android:text="@string/button_OK" />
+
+    </LinearLayout>
+
+</ScrollView>
