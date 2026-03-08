@@ -11,6 +11,11 @@ public class Options {
     private static final String opt_nickname = "nickname";
     private static final String opt_autostart = "autostart";
     private static final String opt_width = "width";
+    private static final String opt_preferred_screen = "preferred_screen";
+
+    // Preferred screen values
+    public static final int SCREEN_PRIMARY   = 0; // Always display 0
+    public static final int SCREEN_SECONDARY = 1; // Always display 1
 
     // Init
     public static void init(Context p_context) {
@@ -46,9 +51,22 @@ public class Options {
         return sharedPref.getInt(opt_width, 50);
     }
 
+    // Save new width
     public static void setWidth(int p_width) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(opt_width, p_width);
+        editor.apply();
+    }
+
+    // Read saved preferred screen (defaults to SCREEN_PRIMARY)
+    public static int getPreferredScreen() {
+        return sharedPref.getInt(opt_preferred_screen, SCREEN_PRIMARY);
+    }
+
+    // Save preferred screen
+    public static void setPreferredScreen(int p_screen) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(opt_preferred_screen, p_screen);
         editor.apply();
     }
 

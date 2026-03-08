@@ -8,4 +8,8 @@
     <string name="editText_Nickname">Nickname</string>
     <string name="rh_logo_description">RH Logo</string>
     <string name="textView_width">Width: %d%%</string>
+    <string-array name="screen_options">
+        <item>Primary Screen</item>
+        <item>Secondary Screen</item>
+    </string-array>
 </resources>
