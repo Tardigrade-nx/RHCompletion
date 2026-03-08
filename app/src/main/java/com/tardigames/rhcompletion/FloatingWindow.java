@@ -1,5 +1,6 @@
 package com.tardigames.rhcompletion;
 
+import android.app.ActivityOptions;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ public class FloatingWindow extends Service {
 
     private WindowManager windowManager;
     private ViewGroup floatView;
+    private int mDisplayId = Display.DEFAULT_DISPLAY;
     static public boolean isRunning = false;
 
     @Nullable
@@ -46,11 +48,10 @@ public class FloatingWindow extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Read which display launched the app; fall back to the default display
-        int displayId = Display.DEFAULT_DISPLAY;
         if (intent != null) {
-            displayId = intent.getIntExtra(EXTRA_DISPLAY_ID, Display.DEFAULT_DISPLAY);
+            mDisplayId = intent.getIntExtra(EXTRA_DISPLAY_ID, Display.DEFAULT_DISPLAY);
         }
-        setupWindow(displayId);
+        setupWindow(mDisplayId);
         return START_NOT_STICKY;
     }
 
@@ -90,10 +91,11 @@ public class FloatingWindow extends Service {
         editButton.setOnClickListener(v -> {
             // Disable autostart
             Options.setAutostart(false);
-            // Start main activity
+            // Start main activity on the same display as the overlay
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            ActivityOptions options = ActivityOptions.makeBasic().setLaunchDisplayId(mDisplayId);
+            startActivity(intent, options.toBundle());
             // Quit service
             close();
         });
