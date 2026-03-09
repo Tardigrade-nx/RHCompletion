@@ -24,6 +24,7 @@ When launching the app for the first time, you will have to give permission for 
 Then, you will have to configure:
 - Your nickname (same as the Discord one)
 - If needed: the width of the floating note, as a percentage of the screen (by default: 50%)
+- On multi-screen devices, such as AYN Thor: the preferred displayed
 
 Subsequent launches will open the floating note directly.
 
