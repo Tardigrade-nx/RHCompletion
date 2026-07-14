@@ -2,6 +2,7 @@ package com.tardigames.rhcompletion;
 
 import android.app.ActivityOptions;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.service.quicksettings.TileService;
 
 import androidx.annotation.Nullable;
 
@@ -43,6 +45,7 @@ public class FloatingWindow extends Service {
     public void onCreate() {
         super.onCreate();
         isRunning = true;
+        requestTileStateUpdate();
     }
 
     @Override
@@ -56,8 +59,10 @@ public class FloatingWindow extends Service {
         DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
         Display display;
         if (Options.getPreferredScreen() == Options.SCREEN_SECONDARY) {
-            Display[] displays = displayManager.getDisplays();
-            display = (displays.length > 1) ? displays[1] : displayManager.getDisplay(Display.DEFAULT_DISPLAY);
+            display = displayManager.getDisplay(Options.getPreferredDisplayId());
+            if (display == null || display.getDisplayId() == Display.DEFAULT_DISPLAY) {
+                display = getSecondaryDisplay(displayManager);
+            }
         } else {
             // SCREEN_PRIMARY
             display = displayManager.getDisplay(Display.DEFAULT_DISPLAY);
@@ -102,7 +107,7 @@ public class FloatingWindow extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LAYOUT_TYPE = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
-            LAYOUT_TYPE = WindowManager.LayoutParams.TYPE_TOAST;
+            LAYOUT_TYPE = WindowManager.LayoutParams.TYPE_PHONE;
         }
 
         // Compute floating window width using the target display's metrics
@@ -160,5 +165,19 @@ public class FloatingWindow extends Service {
             windowManager.removeView(floatView);
         }
         isRunning = false;
+        requestTileStateUpdate();
+    }
+
+    private Display getSecondaryDisplay(DisplayManager displayManager) {
+        for (Display display : displayManager.getDisplays()) {
+            if (display.getDisplayId() != Display.DEFAULT_DISPLAY) {
+                return display;
+            }
+        }
+        return displayManager.getDisplay(Display.DEFAULT_DISPLAY);
+    }
+
+    private void requestTileStateUpdate() {
+        TileService.requestListeningState(this, new ComponentName(this, RHTile.class));
     }
 }

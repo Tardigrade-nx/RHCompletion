@@ -12,6 +12,7 @@ public class Options {
     private static final String opt_autostart = "autostart";
     private static final String opt_width = "width";
     private static final String opt_preferred_screen = "preferred_screen";
+    private static final String opt_preferred_display_id = "preferred_display_id";
 
     // Preferred screen values
     public static final int SCREEN_PRIMARY   = 0; // Always display 0
@@ -67,6 +68,18 @@ public class Options {
     public static void setPreferredScreen(int p_screen) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(opt_preferred_screen, p_screen);
+        editor.apply();
+    }
+
+    // Read saved display ID (defaults to no saved secondary display)
+    public static int getPreferredDisplayId() {
+        return sharedPref.getInt(opt_preferred_display_id, -1);
+    }
+
+    // Save preferred display ID
+    public static void setPreferredDisplayId(int p_displayId) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(opt_preferred_display_id, p_displayId);
         editor.apply();
     }
 

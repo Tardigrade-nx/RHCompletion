@@ -6,6 +6,7 @@ import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Display;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             m_spinner_screen.setVisibility(View.GONE);
             // Force primary so the fallback in FloatingWindow is always correct
             Options.setPreferredScreen(Options.SCREEN_PRIMARY);
+            Options.setPreferredDisplayId(Display.DEFAULT_DISPLAY);
         }
 
         // Configure OK button
@@ -90,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
             Options.setWidth(m_seekBar_width.getProgress());
             // Only save screen preference if the spinner is visible
             if (m_spinner_screen.getVisibility() == View.VISIBLE) {
-                Options.setPreferredScreen(m_spinner_screen.getSelectedItemPosition());
+                int preferredScreen = m_spinner_screen.getSelectedItemPosition();
+                Options.setPreferredScreen(preferredScreen);
+                Options.setPreferredDisplayId(getDisplayId(preferredScreen));
             }
             Options.setAutostart(true);
             checkStart();
@@ -126,12 +130,26 @@ public class MainActivity extends AppCompatActivity {
     private void requestAppearOnTopPermission() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Permission Needed");
-        builder.setMessage("Please enable 'Appear on top' from System Settings.");
+        builder.setMessage("Please enable 'Display over other apps' from System Settings.");
         builder.setPositiveButton("Open Settings", (dialog, which) -> {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, RESULT_OK);
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private int getDisplayId(int preferredScreen) {
+        if (preferredScreen == Options.SCREEN_PRIMARY) {
+            return Display.DEFAULT_DISPLAY;
+        }
+
+        DisplayManager displayManager = (DisplayManager) getSystemService(DISPLAY_SERVICE);
+        for (Display display : displayManager.getDisplays()) {
+            if (display.getDisplayId() != Display.DEFAULT_DISPLAY) {
+                return display.getDisplayId();
+            }
+        }
+        return Display.INVALID_DISPLAY;
     }
 }
